@@ -10,8 +10,12 @@ import java.util.List;
 
 @Service
 public class SeatsService {
+    private final SeatsRepository seatsRepository;
+
     @Autowired
-    private SeatsRepository seatsRepository;
+    public SeatsService(SeatsRepository seatsRepository) {
+        this.seatsRepository = seatsRepository;
+    }
 
     public List<Seat> getAllSeats() {
         return seatsRepository.findAll();

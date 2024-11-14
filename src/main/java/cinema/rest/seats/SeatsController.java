@@ -16,9 +16,12 @@ import java.util.List;
 public class SeatsController {
     final int MAX_ROWS = CinemaConstants.MAX_ROWS_NUMBER;
     final int MAX_COLUMNS = CinemaConstants.MAX_COLUMNS_NUMBER;
+    private final SeatsService seatsService;
 
     @Autowired
-    SeatsService seatsService;
+    public SeatsController(SeatsService seatsService) {
+        this.seatsService = seatsService;
+    }
 
     @GetMapping
     public ResponseEntity<AllSeatsResponseDTO> getSeats() {
