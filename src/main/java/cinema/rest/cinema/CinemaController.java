@@ -46,7 +46,7 @@ public class CinemaController {
     }
 
     @GetMapping("/stats")
-    public ResponseEntity<StatisticsResponseDTO> getAllSeats(@RequestParam String password) {
+    public ResponseEntity<StatisticsResponseDTO> getAllStats(@RequestParam String password) {
         passwordValidationService.validatePassword(password);
 
         StatisticsResponseDTO responseDTO = statisticsService.getStatistics();
