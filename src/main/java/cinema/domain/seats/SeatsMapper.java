@@ -1,8 +1,23 @@
 package cinema.domain.seats;
 
-import org.springframework.stereotype.Component;
+import java.util.List;
+import java.util.stream.Collectors;
 
-@Component
+import cinema.rest.seats.SeatResponse;
+
 public class SeatsMapper {
+    
+    public static List<SeatResponse> toResponseList(List<Seat> seats) {
+        return seats.stream()
+                .map(SeatsMapper::toResponse)
+                .collect(Collectors.toList());
+    }
 
-}
+    public static SeatResponse toResponse(Seat seat) {
+        return new SeatResponse(
+            seat.getRow(),
+            seat.getColumn(),
+            seat.getPrice()
+        );
+    }
+} 

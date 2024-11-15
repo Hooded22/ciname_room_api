@@ -1,31 +1,24 @@
 package cinema.domain.tickets;
 
-import cinema.rest.seats.SeatDTO;
 
 import java.util.UUID;
 
+import cinema.domain.seats.Seat;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Data
+@Setter
+@Getter
+@NoArgsConstructor
 public class Ticket {
-    protected UUID token;
-    protected SeatDTO ticket;
+    protected UUID token = UUID.randomUUID();;
+    protected Seat ticketSeat;
 
-    public Ticket(SeatDTO ticket) {
-        this.ticket = ticket;
-        this.token = UUID.randomUUID();
+    public Ticket(Seat ticketSeat) {
+        this.ticketSeat = ticketSeat;
     }
 
-    public UUID getToken() {
-        return token;
-    }
-
-    public void setToken(UUID token) {
-        this.token = token;
-    }
-
-    public SeatDTO getTicket() {
-        return ticket;
-    }
-
-    public void setTicket(SeatDTO ticket) {
-        this.ticket = ticket;
-    }
 }

@@ -1,6 +1,7 @@
 package cinema.rest.seats;
 
 import cinema.domain.seats.Seat;
+import cinema.domain.seats.SeatsMapper;
 import cinema.domain.seats.SeatsService;
 import cinema.domain.resources.CinemaConstants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class SeatsController {
     @GetMapping
     public ResponseEntity<AllSeatsResponseDTO> getSeats() {
         List<Seat> seats = seatsService.getAllSeats();
-        AllSeatsResponseDTO responseDTO = new AllSeatsResponseDTO(MAX_ROWS, MAX_COLUMNS, SeatDTO.convertSeatsList(seats));
+        AllSeatsResponseDTO responseDTO = new AllSeatsResponseDTO(MAX_ROWS, MAX_COLUMNS, SeatsMapper.toResponseList(seats));
 
         return ResponseEntity.ok(responseDTO);
     }

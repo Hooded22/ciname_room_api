@@ -2,7 +2,7 @@ package cinema.domain.statistics;
 
 import cinema.domain.seats.SeatsService;
 import cinema.domain.tickets.TicketsService;
-import cinema.rest.statisctics.StatisticsResponseDTO;
+import cinema.rest.statisctics.StatisticsResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,17 +10,21 @@ import java.math.BigDecimal;
 
 @Service
 public class StatisticsService {
-    @Autowired
-    TicketsService ticketsService;
-    @Autowired
-    private SeatsService seatsService;
+    private final TicketsService ticketsService;
+    private final SeatsService seatsService;
 
-    public StatisticsResponseDTO getStatistics() {
+    @Autowired
+    public StatisticsService(TicketsService ticketsService, SeatsService seatsService) {
+        this.ticketsService = ticketsService;
+        this.seatsService = seatsService;
+    }
+
+    public StatisticsResponse getStatistics() {
         BigDecimal income = this.getIncomeFromTickets();
         int available = this.getAvailableSeats();
         int purchased = this.getPurchasedTickets();
 
-        StatisticsResponseDTO statisticsDTO = new StatisticsResponseDTO(income, available, purchased);
+        StatisticsResponse statisticsDTO = new StatisticsResponse(income, available, purchased);
         return statisticsDTO;
     }
 

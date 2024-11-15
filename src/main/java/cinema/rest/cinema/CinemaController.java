@@ -4,12 +4,13 @@ import cinema.domain.exceptions.*;
 import cinema.rest.error.ErrorResponseDTO;
 import cinema.rest.seats.PurchaseSeatBodyDTO;
 import cinema.domain.auth.PasswordValidationService;
-import cinema.rest.statisctics.StatisticsResponseDTO;
+import cinema.rest.statisctics.StatisticsResponse;
 import cinema.domain.statistics.StatisticsService;
 import cinema.domain.tickets.Ticket;
 import cinema.domain.tickets.TicketsService;
-import cinema.rest.tickets.dto.ReturnTicketBodyDTO;
-import cinema.rest.tickets.dto.ReturnTicketResponseDTO;
+import cinema.rest.tickets.ReturnTicketRequest;
+import cinema.rest.tickets.ReturnTicketResponse;
+import cinema.rest.tickets.TicketResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,23 +34,23 @@ public class CinemaController {
     }
 
     @PostMapping("/purchase")
-    public ResponseEntity<Ticket> purchaseSeat(@RequestBody PurchaseSeatBodyDTO body) {
-        Ticket ticket = ticketsService.purchaseTicket(body.getRow(), body.getColumn());
+    public ResponseEntity<TicketResponse> purchaseSeat(@RequestBody PurchaseSeatBodyDTO body) {
+        TicketResponse ticket = ticketsService.purchaseTicket(body.getRow(), body.getColumn());
 
         return new ResponseEntity<>(ticket, HttpStatus.OK);
     }
 
     @PostMapping("/return")
-    public ResponseEntity<ReturnTicketResponseDTO> returnTicket(@RequestBody ReturnTicketBodyDTO body) {
+    public ResponseEntity<ReturnTicketResponse> returnTicket(@RequestBody ReturnTicketRequest body) {
         return new ResponseEntity<>(ticketsService.returnTicket(body.getToken()), HttpStatus.OK);
 
     }
 
     @GetMapping("/stats")
-    public ResponseEntity<StatisticsResponseDTO> getAllStats(@RequestParam String password) {
+    public ResponseEntity<StatisticsResponse> getAllStats(@RequestParam String password) {
         passwordValidationService.validatePassword(password);
 
-        StatisticsResponseDTO responseDTO = statisticsService.getStatistics();
+        StatisticsResponse responseDTO = statisticsService.getStatistics();
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 

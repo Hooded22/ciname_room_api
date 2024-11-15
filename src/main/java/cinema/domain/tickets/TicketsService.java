@@ -1,11 +1,14 @@
 package cinema.domain.tickets;
 
+import cinema.domain.archivedTicket.ArchivedTicket;
+import cinema.domain.archivedTicket.ArchivedTicketRepository;
 import cinema.domain.exceptions.ErrorMessages;
 import cinema.domain.seats.Seat;
+import cinema.domain.seats.SeatsMapper;
 import cinema.domain.seats.SeatsService;
-import cinema.rest.seats.SeatDTO;
-import cinema.rest.tickets.dto.ReturnTicketResponseDTO;
+import cinema.rest.tickets.ReturnTicketResponse;
 import cinema.domain.exceptions.WrongTokenException;
+import cinema.rest.tickets.TicketResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,33 +19,46 @@ import java.util.UUID;
 @Service
 public class TicketsService {
 
-    @Autowired
-    TicketsRepository ticketsRepository;
-    @Autowired
-    SeatsService seatsService;
+    private final TicketsRepository ticketsRepository;
+    private final ArchivedTicketRepository archivedTicketRepository;
+    private final SeatsService seatsService;
 
-    public Ticket purchaseTicket(int row, int col) {
-        Seat seat = seatsService.purchaseSeat(row, col);
-        Ticket ticket = new Ticket(SeatDTO.convertSeat(seat));
-
-        return ticketsRepository.addTicket(ticket);
+    @Autowired
+    public TicketsService(TicketsRepository ticketsRepository, SeatsService seatsService, ArchivedTicketRepository archivedTicketRepository) {
+        this.ticketsRepository = ticketsRepository;
+        this.seatsService = seatsService;
+        this.archivedTicketRepository = archivedTicketRepository;
     }
 
-    public ReturnTicketResponseDTO returnTicket(UUID token) {
+    public TicketResponse purchaseTicket(int row, int col) {
+        Seat seat = seatsService.purchaseSeat(row, col);
+        Ticket ticket = new Ticket();
+        ticket.setTicketSeat(seat);
+
+        Ticket addedTicket = ticketsRepository.addTicket(ticket);
+
+        return TicketMapper.toTicketResponse(addedTicket);
+    }
+
+    public ReturnTicketResponse returnTicket(UUID token) {
         Ticket deletedTicket = ticketsRepository.deleteTicketByToken(token);
         if (deletedTicket == null) {
             throw new WrongTokenException(ErrorMessages.WRONG_TOKEN.getMessage());
         } else {
-            ArchivedTicket archivedTicket = ticketsRepository.addReturnedTicket(deletedTicket);
-            seatsService.freeSeat(archivedTicket.getTicket().getRow(), archivedTicket.ticket.getColumn());
+            ArchivedTicket archivedTicket = archivedTicketRepository.addReturnedTicket(deletedTicket);
+            seatsService.freeSeat(archivedTicket.getTicketSeat().getRow(), archivedTicket.getTicketSeat().getColumn());
 
-            return new ReturnTicketResponseDTO(archivedTicket.getTicket());
+            ReturnTicketResponse returnTicketResponse = new ReturnTicketResponse();
+            returnTicketResponse.setTicketSeat(SeatsMapper.toResponse(archivedTicket.getTicketSeat()));
+
+
+            return returnTicketResponse;
         }
     }
 
     public BigDecimal countTicketsIncome() {
         List<Ticket> allTickets = ticketsRepository.getTickets();
-        int ticketsPrice = allTickets.stream().mapToInt(item -> item.getTicket().getPrice()).sum();
+        int ticketsPrice = allTickets.stream().mapToInt(item -> item.getTicketSeat().getPrice()).sum();
 
         return new BigDecimal(ticketsPrice);
     }
