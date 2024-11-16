@@ -1,0 +1,10 @@
+INSERT INTO Seat (`row`, `column`, isOccupied, price) VALUES
+                                                          (1, 1, false, 10), (1, 2, false, 10), (1, 3, false, 10), (1, 4, false, 10), (1, 5, false, 10), (1, 6, false, 10), (1, 7, false, 10), (1, 8, false, 10), (1, 9, false, 10),
+                                                          (2, 1, false, 10), (2, 2, false, 10), (2, 3, false, 10), (2, 4, false, 10), (2, 5, false, 10), (2, 6, false, 10), (2, 7, false, 10), (2, 8, false, 10), (2, 9, false, 10),
+                                                          (3, 1, false, 10), (3, 2, false, 10), (3, 3, false, 10), (3, 4, false, 10), (3, 5, false, 10), (3, 6, false, 10), (3, 7, false, 10), (3, 8, false, 10), (3, 9, false, 10),
+                                                          (4, 1, false, 10), (4, 2, false, 10), (4, 3, false, 10), (4, 4, false, 10), (4, 5, false, 10), (4, 6, false, 10), (4, 7, false, 10), (4, 8, false, 10), (4, 9, false, 10),
+                                                          (5, 1, false, 8),  (5, 2, false, 8),  (5, 3, false, 8),  (5, 4, false, 8),  (5, 5, false, 8),  (5, 6, false, 8),  (5, 7, false, 8),  (5, 8, false, 8),  (5, 9, false, 8),
+                                                          (6, 1, false, 8),  (6, 2, false, 8),  (6, 3, false, 8),  (6, 4, false, 8),  (6, 5, false, 8),  (6, 6, false, 8),  (6, 7, false, 8),  (6, 8, false, 8),  (6, 9, false, 8),
+                                                          (7, 1, false, 8),  (7, 2, false, 8),  (7, 3, false, 8),  (7, 4, false, 8),  (7, 5, false, 8),  (7, 6, false, 8),  (7, 7, false, 8),  (7, 8, false, 8),  (7, 9, false, 8),
+                                                          (8, 1, false, 8),  (8, 2, false, 8),  (8, 3, false, 8),  (8, 4, false, 8),  (8, 5, false, 8),  (8, 6, false, 8),  (8, 7, false, 8),  (8, 8, false, 8),  (8, 9, false, 8),
+                                                          (9, 1, false, 8),  (9, 2, false, 8),  (9, 3, false, 8),  (9, 4, false, 8),  (9, 5, false, 8),  (9, 6, false, 8),  (9, 7, false, 8),  (9, 8, false, 8),  (9, 9, false, 8);
