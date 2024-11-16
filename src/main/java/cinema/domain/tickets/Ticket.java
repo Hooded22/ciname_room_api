@@ -1,24 +1,29 @@
 package cinema.domain.tickets;
 
 
+import cinema.domain.seats.Seat;
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import java.util.UUID;
 
-import cinema.domain.seats.Seat;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
+@Entity
+@Table(name = "Ticket")
 @Data
-@Setter
-@Getter
 @NoArgsConstructor
 public class Ticket {
-    protected UUID token = UUID.randomUUID();;
-    protected Seat ticketSeat;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private UUID token = UUID.randomUUID();
+
+    @ManyToOne
+    @JoinColumn(name = "seat_id")
+    private Seat ticketSeat;
 
     public Ticket(Seat ticketSeat) {
         this.ticketSeat = ticketSeat;
     }
-
 }
