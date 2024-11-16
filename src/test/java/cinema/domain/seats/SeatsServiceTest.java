@@ -49,17 +49,18 @@ class SeatsServiceTest {
         seat.setColumn(2);
         seat.setRow(1);
 
-        Mockito.when(seatsRepository.findByRowAndColumn(1,2)).thenReturn(seat);
-        Mockito.when(seatsRepository.findByIdAndUpdateIsOccupied(seat.getId(), true)).thenReturn(seat);
+        Mockito.when(seatsRepository.findBySeatRowAndSeatColumn(1,2)).thenReturn(seat);
+        Mockito.when(seatsRepository.save(seat)).thenReturn(seat);
 
         Seat purchaseSeat = seatsService.purchaseSeat(1, 2);
 
         assertEquals(seat, purchaseSeat);
+        assertEquals(purchaseSeat.isOccupied(), true);
     }
 
     @Test
     void purchaseSeat_shouldThrowException_whenSeatNotFound() {
-        Mockito.when(seatsRepository.findByRowAndColumn(1,2)).thenReturn(null);
+        Mockito.when(seatsRepository.findBySeatRowAndSeatColumn(1,2)).thenReturn(null);
 
         SeatNotFoundException seatNotFoundException = assertThrows(SeatNotFoundException.class, () -> seatsService.purchaseSeat(1, 2));
 
@@ -71,7 +72,7 @@ class SeatsServiceTest {
         Seat seat = new Seat();
         seat.setOccupied(true);
 
-        Mockito.when(seatsRepository.findByRowAndColumn(1,2)).thenReturn(seat);
+        Mockito.when(seatsRepository.findBySeatRowAndSeatColumn(1,2)).thenReturn(seat);
 
         SeatOccupiedException seatNotFoundException = assertThrows(SeatOccupiedException.class, () -> seatsService.purchaseSeat(1, 2));
 
@@ -84,16 +85,18 @@ class SeatsServiceTest {
         seat.setColumn(2);
         seat.setRow(1);
 
-        Mockito.when(seatsRepository.findByRowAndColumn(1,2)).thenReturn(seat);
-        Mockito.when(seatsRepository.findByIdAndUpdateIsOccupied(seat.getId(), false)).thenReturn(seat);
+        Mockito.when(seatsRepository.findBySeatRowAndSeatColumn(1,2)).thenReturn(seat);
+        Mockito.when(seatsRepository.save(seat)).thenReturn(seat);
+
         Seat freeSeat = seatsService.freeSeat(1, 2);
 
         assertEquals(seat, freeSeat);
+        assertEquals(freeSeat.isOccupied(), false);
     }
 
     @Test
     void freeSeat_shouldThrowException_whenSeatNotFound() {
-        Mockito.when(seatsRepository.findByRowAndColumn(1,2)).thenReturn(null);
+        Mockito.when(seatsRepository.findBySeatRowAndSeatColumn(1,2)).thenReturn(null);
         SeatNotFoundException seatNotFoundException = assertThrows(SeatNotFoundException.class, () -> seatsService.freeSeat(1, 2));
 
         Assertions.assertEquals(seatNotFoundException.getMessage(), "The number of a row or a column is out of bounds!");

@@ -22,7 +22,7 @@ public class SeatsService {
     }
 
     public Seat purchaseSeat(int row, int colum) {
-        Seat seat = seatsRepository.findByRowAndColumn(row, colum);
+        Seat seat = seatsRepository.findBySeatRowAndSeatColumn(row, colum);
 
         if (seat == null) {
             throw new SeatNotFoundException(ErrorMessages.SEAT_NOT_FOUND.getMessage());
@@ -32,17 +32,21 @@ public class SeatsService {
             throw new SeatOccupiedException(ErrorMessages.SEAT_OCCUPIED.getMessage());
         }
 
-        return seatsRepository.findByIdAndUpdateIsOccupied(seat.getId(), true);
+        seat.setOccupied(true);
+
+        return seatsRepository.save(seat);
     }
 
     public Seat freeSeat(int row, int colum) {
-        Seat seat = seatsRepository.findByRowAndColumn(row, colum);
+        Seat seat = seatsRepository.findBySeatRowAndSeatColumn(row, colum);
 
         if (seat == null) {
             throw new SeatNotFoundException(ErrorMessages.SEAT_NOT_FOUND.getMessage());
         }
 
-        return seatsRepository.findByIdAndUpdateIsOccupied(seat.getId(), false);
+        seat.setOccupied(false);
+
+        return seatsRepository.save(seat);
     }
 
     public int getNumberOfFreeSeats() {
