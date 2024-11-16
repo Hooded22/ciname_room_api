@@ -5,3 +5,24 @@ Always wanted to have your private movie theater and screen only the movies you 
 Here's the link to the project: https://hyperskill.org/projects/197
 
 Check out my profile: https://hyperskill.org/profile/180527031
+
+## How to run locally
+1. Add .env file
+
+`.env` file sample data for local run
+
+```
+DB_URL=jdbc:mysql://localhost:3307/cinema_db
+DB_USERNAME=root
+DB_PASSWORD=cinema_db
+REDIS_HOST=localhost
+REDIS_PORT=6379
+STATS_PASSWORD=some_password
+```
+
+2. Create MySQL database using sample docket command
+```
+docker run --name my-mysql-cinema -e MYSQL_ROOT_PASSWORD=cinema_db -e MYSQL_DATABASE=cinema_db -e MYSQL_PASSWORD=cinema_db -p 3307:3306 -d mysql:8.0
+```
+
+3. Run `Main.java` class
