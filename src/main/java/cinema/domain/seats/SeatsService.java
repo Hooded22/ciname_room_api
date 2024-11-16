@@ -22,7 +22,7 @@ public class SeatsService {
     }
 
     public Seat purchaseSeat(int row, int colum) {
-        Seat seat = seatsRepository.findBySeatRowAndSeatColumn(row, colum);
+        Seat seat = seatsRepository.findByRowAndColumn(row, colum);
 
         if (seat == null) {
             throw new SeatNotFoundException(ErrorMessages.SEAT_NOT_FOUND.getMessage());
@@ -38,7 +38,7 @@ public class SeatsService {
     }
 
     public Seat freeSeat(int row, int colum) {
-        Seat seat = seatsRepository.findBySeatRowAndSeatColumn(row, colum);
+        Seat seat = seatsRepository.findByRowAndColumn(row, colum);
 
         if (seat == null) {
             throw new SeatNotFoundException(ErrorMessages.SEAT_NOT_FOUND.getMessage());

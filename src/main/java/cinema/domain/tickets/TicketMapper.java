@@ -1,5 +1,6 @@
 package cinema.domain.tickets;
 
+import cinema.domain.archivedTicket.ArchivedTicket;
 import cinema.domain.seats.SeatsMapper;
 import cinema.rest.seats.SeatResponse;
 import cinema.rest.tickets.TicketResponse;
@@ -22,5 +23,14 @@ public class TicketMapper {
         returnTicketResponse.setTicketSeat(seatResponse);
 
         return returnTicketResponse;
+    }
+
+    public static ArchivedTicket toArchiveTicket(Ticket ticket) {
+        ArchivedTicket archivedTicket = new ArchivedTicket();
+
+       archivedTicket.setTicketSeat(ticket.getTicketSeat());
+       archivedTicket.setToken(ticket.getToken());
+
+       return archivedTicket;
     }
 }

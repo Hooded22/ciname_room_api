@@ -35,17 +35,20 @@ public class TicketsService {
         Ticket ticket = new Ticket();
         ticket.setTicketSeat(seat);
 
-        Ticket addedTicket = ticketsRepository.addTicket(ticket);
+        Ticket addedTicket = ticketsRepository.save(ticket);
 
         return TicketMapper.toTicketResponse(addedTicket);
     }
 
     public ReturnTicketResponse returnTicket(UUID token) {
         Ticket deletedTicket = ticketsRepository.deleteTicketByToken(token);
+
         if (deletedTicket == null) {
             throw new WrongTokenException(ErrorMessages.WRONG_TOKEN.getMessage());
         } else {
-            ArchivedTicket archivedTicket = archivedTicketRepository.addReturnedTicket(deletedTicket);
+            ArchivedTicket archivedTicket = TicketMapper.toArchiveTicket(deletedTicket);
+
+            archivedTicketRepository.save(archivedTicket);
             seatsService.freeSeat(archivedTicket.getTicketSeat().getRow(), archivedTicket.getTicketSeat().getColumn());
 
             ReturnTicketResponse returnTicketResponse = new ReturnTicketResponse();
@@ -57,14 +60,14 @@ public class TicketsService {
     }
 
     public BigDecimal countTicketsIncome() {
-        List<Ticket> allTickets = ticketsRepository.getTickets();
+        List<Ticket> allTickets = ticketsRepository.findAll();
         int ticketsPrice = allTickets.stream().mapToInt(item -> item.getTicketSeat().getPrice()).sum();
 
         return new BigDecimal(ticketsPrice);
     }
 
     public int getPurchasedTickets() {
-        return ticketsRepository.getTickets().size();
+        return ticketsRepository.findAll().size();
     }
 
 }
