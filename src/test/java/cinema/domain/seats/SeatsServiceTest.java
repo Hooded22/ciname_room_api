@@ -1,5 +1,6 @@
 package cinema.domain.seats;
 
+import cinema.config.TestCacheConfig;
 import cinema.domain.exceptions.SeatNotFoundException;
 import cinema.domain.exceptions.SeatOccupiedException;
 import org.junit.jupiter.api.Assertions;
@@ -9,14 +10,21 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cache.CacheManager;
+import org.springframework.context.annotation.Import;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Import(TestCacheConfig.class)
 class SeatsServiceTest {
     @Mock
     private SeatsRepository seatsRepository;
+
+    @Mock
+    private CacheManager cacheManager;
 
     @InjectMocks
     private SeatsService seatsService;

@@ -10,6 +10,9 @@ import cinema.rest.tickets.ReturnTicketResponse;
 import cinema.domain.exceptions.WrongTokenException;
 import cinema.rest.tickets.TicketResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -30,6 +33,13 @@ public class TicketsService {
         this.archivedTicketRepository = archivedTicketRepository;
     }
 
+    @Cacheable(value = "tickets", key = "#token")
+    public Ticket getTicketByToken(UUID token) {
+        return ticketsRepository.findTicketByToken(token.toString())
+            .orElseThrow(() -> new WrongTokenException(ErrorMessages.WRONG_TOKEN.getMessage()));
+    }
+
+    @CacheEvict(value = {"tickets", "statistics"}, allEntries = true)
     public TicketResponse purchaseTicket(int row, int col) {
         Seat seat = seatsService.purchaseSeat(row, col);
         Ticket ticket = new Ticket();
@@ -40,8 +50,12 @@ public class TicketsService {
         return TicketMapper.toTicketResponse(addedTicket);
     }
 
+    @Caching(evict = {
+        @CacheEvict(value = "tickets", key = "#token"),
+        @CacheEvict(value = {"seats", "statistics"}, allEntries = true)
+    })
     public ReturnTicketResponse returnTicket(UUID token) {
-        Ticket deletedTicket = ticketsRepository.deleteTicketByToken(token);
+        Ticket deletedTicket = ticketsRepository.deleteTicketByToken(token.toString());
 
         if (deletedTicket == null) {
             throw new WrongTokenException(ErrorMessages.WRONG_TOKEN.getMessage());
@@ -59,6 +73,7 @@ public class TicketsService {
         }
     }
 
+    @Cacheable(value = "statistics", key = "'income'")
     public BigDecimal countTicketsIncome() {
         List<Ticket> allTickets = ticketsRepository.findAll();
         int ticketsPrice = allTickets.stream().mapToInt(item -> item.getTicketSeat().getPrice()).sum();
@@ -66,6 +81,7 @@ public class TicketsService {
         return new BigDecimal(ticketsPrice);
     }
 
+    @Cacheable(value = "statistics", key = "'purchased_count'")
     public int getPurchasedTickets() {
         return ticketsRepository.findAll().size();
     }

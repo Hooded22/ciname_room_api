@@ -4,6 +4,8 @@ import cinema.domain.exceptions.ErrorMessages;
 import cinema.domain.exceptions.SeatNotFoundException;
 import cinema.domain.exceptions.SeatOccupiedException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,10 +19,12 @@ public class SeatsService {
         this.seatsRepository = seatsRepository;
     }
 
+    @Cacheable(value = "seats")
     public List<Seat> getAllSeats() {
         return seatsRepository.findAll();
     }
 
+    @CacheEvict(value = {"seats", "statistics"}, allEntries = true)
     public Seat purchaseSeat(int row, int colum) {
         Seat seat = seatsRepository.findByRowAndColumn(row, colum);
 
@@ -37,6 +41,7 @@ public class SeatsService {
         return seatsRepository.save(seat);
     }
 
+    @CacheEvict(value = {"seats", "statistics"}, allEntries = true)
     public Seat freeSeat(int row, int colum) {
         Seat seat = seatsRepository.findByRowAndColumn(row, colum);
 
@@ -49,6 +54,7 @@ public class SeatsService {
         return seatsRepository.save(seat);
     }
 
+    @Cacheable(value = "statistics", key = "'free_seats_count'")
     public int getNumberOfFreeSeats() {
         List<Seat> seats = seatsRepository.findAll();
         return seats.stream().filter(seat -> !seat.isOccupied()).toList().size();

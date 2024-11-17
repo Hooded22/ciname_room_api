@@ -11,11 +11,11 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 public class TicketResponse {
-    private UUID token;
+    private String token;
     private SeatResponse ticketSeat;
 
 
-    public TicketResponse(SeatResponse ticketSeat, UUID token) {
+    public TicketResponse(SeatResponse ticketSeat, String token) {
         this.ticketSeat = ticketSeat;
         this.token = token;
     }

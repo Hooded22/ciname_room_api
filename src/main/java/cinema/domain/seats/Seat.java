@@ -4,21 +4,28 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "Seat")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Seat {
+public class Seat implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "`row`")
     private int row;
+
+    @Column(name = "`column`")
     private int column;
+
     private boolean isOccupied = false;
+
     private int price;
 
     public Seat(int row, int column) {

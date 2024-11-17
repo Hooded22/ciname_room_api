@@ -17,13 +17,14 @@ public class ArchivedTicket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private UUID token;
+    @Column(columnDefinition = "VARCHAR(36)")
+    private String token = UUID.randomUUID().toString();
 
     @ManyToOne
     @JoinColumn(name = "seat_id")
     private Seat ticketSeat;
 
-    public ArchivedTicket(Seat ticketSeat, UUID token) {
+    public ArchivedTicket(Seat ticketSeat, String token) {
         this.ticketSeat = ticketSeat;
         this.token = token;
     }

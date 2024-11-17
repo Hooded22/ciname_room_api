@@ -24,5 +24,13 @@ STATS_PASSWORD=some_password
 ```
 docker run --name my-mysql-cinema -e MYSQL_ROOT_PASSWORD=cinema_db -e MYSQL_DATABASE=cinema_db -e MYSQL_PASSWORD=cinema_db -p 3307:3306 -d mysql:8.0
 ```
+3. Run redis server using docker
 
-3. Run `Main.java` class
+```
+docker run --name my-redis-cinema -p 6379:6379 -d redis:7.4
+``` 
+
+4. Run `Main.java` class
+```
+./gradlew bootRun
+```

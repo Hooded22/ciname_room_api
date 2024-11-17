@@ -1,5 +1,6 @@
 package cinema.domain.tickets;
 
+import java.io.Serializable;
 
 import cinema.domain.seats.Seat;
 import jakarta.persistence.*;
@@ -11,13 +12,16 @@ import java.util.UUID;
 @Table(name = "Ticket")
 @Data
 @NoArgsConstructor
-public class Ticket {
+public class Ticket implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private UUID token = UUID.randomUUID();
+    @Column(columnDefinition = "VARCHAR(36)")
+    private String token = UUID.randomUUID().toString();
 
     @ManyToOne
     @JoinColumn(name = "seat_id")
@@ -25,5 +29,9 @@ public class Ticket {
 
     public Ticket(Seat ticketSeat) {
         this.ticketSeat = ticketSeat;
+    }
+
+    public UUID getTokenAsUUID() {
+        return UUID.fromString(token);
     }
 }
