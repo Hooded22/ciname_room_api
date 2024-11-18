@@ -13,6 +13,10 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -44,11 +48,13 @@ class SeatsServiceTest {
         seat2.setRow(1);
         List<Seat> seats = List.of(seat, seat2);
 
-        Mockito.when(seatsRepository.findAll()).thenReturn(seats);
+        Pageable pageable = PageRequest.of(0, 2);
+        Page<Seat> seatsPage = new PageImpl<>(seats);
+        Mockito.when(seatsRepository.findAll(pageable)).thenReturn(seatsPage);
 
-        List<Seat> allSeats = seatsService.getAllSeats();
+        Page<Seat> allSeats = seatsService.getAllSeats(pageable);
 
-        assertEquals(seats, allSeats);
+        assertEquals(seats, allSeats.getContent());
     }
 
     @Test

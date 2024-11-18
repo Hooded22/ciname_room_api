@@ -1,7 +1,9 @@
 package cinema.rest.seats;
 
 import lombok.Getter;
+import lombok.Setter;
 
+@Setter
 @Getter
 public class SeatResponse {
     private int row;
@@ -17,15 +19,4 @@ public class SeatResponse {
         this.price = price;
     }
 
-    public void setRow(int row) {
-        this.row = row;
-    }
-
-    public void setColumn(int column) {
-        this.column = column;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
 }

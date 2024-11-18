@@ -6,6 +6,8 @@ import cinema.domain.exceptions.SeatOccupiedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,8 +22,9 @@ public class SeatsService {
     }
 
     @Cacheable(value = "seats")
-    public List<Seat> getAllSeats() {
-        return seatsRepository.findAll();
+    public Page<Seat> getAllSeats(Pageable pageable) {
+        Page<Seat> seats = seatsRepository.findAll(pageable);
+        return seatsRepository.findAll(pageable);
     }
 
     @CacheEvict(value = {"seats", "statistics"}, allEntries = true)
