@@ -7,13 +7,13 @@ import cinema.rest.seats.SeatResponse;
 
 public class SeatsMapper {
     
-    public static List<SeatResponse> toResponseList(List<Seat> seats) {
+    public List<SeatResponse> toResponseList(List<Seat> seats) {
         return seats.stream()
-                .map(SeatsMapper::toResponse)
+                .map(this::toResponse)
                 .collect(Collectors.toList());
     }
 
-    public static SeatResponse toResponse(Seat seat) {
+    public SeatResponse toResponse(Seat seat) {
         return new SeatResponse(
             seat.getRow(),
             seat.getColumn(),

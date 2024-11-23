@@ -7,9 +7,9 @@ import cinema.rest.tickets.TicketResponse;
 import cinema.rest.tickets.ReturnTicketResponse;
 
 public class TicketMapper {
-    public static TicketResponse toTicketResponse(Ticket ticket) {
+    public TicketResponse toTicketResponse(Ticket ticket) {
         TicketResponse ticketResponse = new TicketResponse();
-        SeatResponse seatResponse = SeatsMapper.toResponse(ticket.getTicketSeat());
+        SeatResponse seatResponse = new SeatsMapper().toResponse(ticket.getTicketSeat());
 
         ticketResponse.setTicketSeat(seatResponse);
         ticketResponse.setToken(ticket.getToken());
@@ -17,15 +17,15 @@ public class TicketMapper {
         return ticketResponse;
     }
 
-    public static ReturnTicketResponse toReturnTicketResponse(Ticket ticket) {
+    public ReturnTicketResponse toReturnTicketResponse(Ticket ticket) {
         ReturnTicketResponse returnTicketResponse = new ReturnTicketResponse();
-        SeatResponse seatResponse = SeatsMapper.toResponse(ticket.getTicketSeat());
+        SeatResponse seatResponse = new SeatsMapper().toResponse(ticket.getTicketSeat());
         returnTicketResponse.setTicketSeat(seatResponse);
 
         return returnTicketResponse;
     }
 
-    public static ArchivedTicket toArchiveTicket(Ticket ticket) {
+    public ArchivedTicket toArchiveTicket(Ticket ticket) {
         ArchivedTicket archivedTicket = new ArchivedTicket();
 
        archivedTicket.setTicketSeat(ticket.getTicketSeat());

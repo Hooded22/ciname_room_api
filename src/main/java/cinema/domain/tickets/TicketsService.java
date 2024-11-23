@@ -47,7 +47,7 @@ public class TicketsService {
 
         Ticket addedTicket = ticketsRepository.save(ticket);
 
-        return TicketMapper.toTicketResponse(addedTicket);
+        return new TicketMapper().toTicketResponse(addedTicket);
     }
 
     @Caching(evict = {
@@ -60,13 +60,13 @@ public class TicketsService {
         if (deletedTicket == null) {
             throw new WrongTokenException(ErrorMessages.WRONG_TOKEN.getMessage());
         } else {
-            ArchivedTicket archivedTicket = TicketMapper.toArchiveTicket(deletedTicket);
+            ArchivedTicket archivedTicket = new TicketMapper().toArchiveTicket(deletedTicket);
 
             archivedTicketRepository.save(archivedTicket);
             seatsService.freeSeat(archivedTicket.getTicketSeat().getRow(), archivedTicket.getTicketSeat().getColumn());
 
             ReturnTicketResponse returnTicketResponse = new ReturnTicketResponse();
-            returnTicketResponse.setTicketSeat(SeatsMapper.toResponse(archivedTicket.getTicketSeat()));
+            returnTicketResponse.setTicketSeat(new SeatsMapper().toResponse(archivedTicket.getTicketSeat()));
 
 
             return returnTicketResponse;

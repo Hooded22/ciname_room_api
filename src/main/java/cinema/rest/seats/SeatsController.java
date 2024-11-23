@@ -27,7 +27,7 @@ public class SeatsController {
     @GetMapping
     public ResponseEntity<AllSeatsResponseDTO> getSeats() {
         List<Seat> seats = seatsService.getAllSeats();
-        AllSeatsResponseDTO responseDTO = new AllSeatsResponseDTO(MAX_ROWS, MAX_COLUMNS, SeatsMapper.toResponseList(seats));
+        AllSeatsResponseDTO responseDTO = new AllSeatsResponseDTO(MAX_ROWS, MAX_COLUMNS, new SeatsMapper().toResponseList(seats));
 
         return ResponseEntity.ok(responseDTO);
     }
