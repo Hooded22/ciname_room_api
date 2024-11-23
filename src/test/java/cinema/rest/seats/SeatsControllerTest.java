@@ -3,11 +3,16 @@ package cinema.rest.seats;
 import cinema.domain.seats.Seat;
 import cinema.domain.seats.SeatsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -40,7 +45,9 @@ class SeatsControllerTest {
         seat2.setColumn(2);
         List<Seat> seats = List.of(seat, seat2);
 
-        Mockito.when(seatsService.getAllSeats()).thenReturn(seats);
+        Page<Seat> seatsPage = new PageImpl<>(seats);
+
+        Mockito.when(seatsService.getAllSeats(Mockito.any(Pageable.class))).thenReturn(seatsPage);
 
         mvc.perform(get("/seats"))
                 .andExpect(status().isOk())

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import cinema.rest.seats.SeatResponse;
+import org.springframework.data.domain.Page;
 
 public class SeatsMapper {
     
